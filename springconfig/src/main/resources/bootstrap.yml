@@ -1,0 +1,13 @@
+
+spring:
+  application:
+    name: config  # 应用名称
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://e.coding.net/rain_zhang/config/config.git #配置文件所在仓库
+          username: 254856090@qq.com
+          password: zyy110
+          search-paths: config  #配置文件所在根目录
+

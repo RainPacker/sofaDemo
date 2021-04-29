@@ -1,0 +1,50 @@
+@startuml
+autonumber
+商户平台 -> BACKEND: (发起支付请求 获取收银台地址)
+BACKEND --> 商户平台:返回收银台地址 跳转收银台
+H5收银台->BACKEND:(获取商户提交的基本信息，订单金额信息 ？？)
+BACKEND -->H5收银台: return 商户提交的基本信息，订单金额等信息
+H5收银台->H5收银台: 展示可用的支付方式，金额信息
+H5收银台->H5收银台 :  选择支付方式
+alt PC
+   alt Wechat
+   H5收银台->BACKEND: 组装报文获取 支付二维码
+   else Alipay
+    H5收银台->BACKEND: 组装报文获取 支付二维码
+   else Unionpay
+    H5收银台->BACKEND: 组装报文获取 URL 跳转银联 URL
+   end
+ else MOBILE
+
+      alt Wechat
+        alt is in Wechat:
+         H5收银台->H5收银台: 跳转微信授权页面获取code 换取token \n获取open 后续支付要使用
+
+         H5收银台->BACKEND: 组装报文获取(onlinePayment/v1_1/pay/jsapi)
+         BACKEND-->H5收银台 : return  JS sdk 签名等信息
+         H5收银台->H5收银台: 使用 JS sdk 发起支付
+        else 不在微信中
+        H5收银台->BACKEND: 组装报文获取 支付二维码
+        end
+      else Alipay
+         alt is in  Wechat
+          H5收银台->BACKEND: 组装报文获取 支付二维码
+         else  is in Alipay
+          H5收银台->BACKEND: 组装报文获取 使用 JS sdk 发起支付
+		 else H5 mobile
+            H5收银台->BACKEND: 组装报文调用接口onlinePayment/v1_1/pay/wapPay
+            BACKEND-->H5收银台: wap 下单成功
+            H5收银台->BACKEND: 调用获取支付地址接口（https://guigu.motionpaydev.com/onlinePayment/v1_1/pay/getPayUrl）
+            BACKEND -->H5收银台: return PayUrl
+            H5收银台->H5收银台: 跳转到 payUrl 完成支付
+
+         end
+
+      else Unionpay
+       H5收银台->BACKEND: 组装报文获取 URL 跳转银联 URL
+     end
+
+
+end
+
+@enduml

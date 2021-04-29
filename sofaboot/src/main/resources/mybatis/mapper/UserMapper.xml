@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.sofa.mapper.UserMapper" >
+
+
+    <select id="getByage" resultType="com.facade.service.model.User">
+        select * from user where age=#{age}
+    </select>
+
+    <insert id="addBatch" parameterType="java.util.List">
+
+        INSERT INTO user(id,name,age,email,createTime)
+        VALUES
+        <foreach collection="users" item="user" separator=",">
+            (#{user.id},#{user.name},#{user.age},#{user.email},#{user.createTime})
+        </foreach>
+
+    </insert>
+
+    <select id="selectPage" resultType="com.facade.service.model.User">
+
+            select   *  from user
+
+    </select>
+
+</mapper>

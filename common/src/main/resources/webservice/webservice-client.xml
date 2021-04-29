@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+<!--    ${spring.profiles.active}-->
+    <util:properties id="customerProperties" location="classpath:/webservice/webservice.properties"/>
+    <context:property-placeholder location="classpath:/webservice/webservice.properties"/>
+
+
+
+<!--    管理接口 -->
+<!--   通过代理实现 bean -->
+
+    <bean id="manageServiceProxyFactory"
+          class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+        <property name="serviceClass" value="com.facade.service.UserService"></property>
+        <property name="address" value="${userService.url}"></property>
+
+    </bean>
+    <bean id="webUserService"
+          class="com.facade.service.UserService"
+          factory-bean="manageServiceProxyFactory" factory-method="create" />
+<!--   通过 client 调用 webservice-->
+
+    <jaxws:client
+        id="webUserService2"
+        serviceClass="com.facade.service.UserService"
+        address="#{customerProperties['userService.url']}" >
+        <jaxws:inInterceptors>
+            <bean name="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+            <!--			<ref bean="inInterceptor"></ref>-->
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <bean name="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+            <!--		    <ref bean="outInterceptor"></ref>-->
+        </jaxws:outInterceptors>
+
+    </jaxws:client>
+
+    <bean id="outInterceptor" class="com.springboot.webserviceInterceptor.MessageOutInterceptor"></bean>
+    <bean id="inInterceptor" class="com.springboot.webserviceInterceptor.WebLogInInterceptor"></bean>
+
+    <jaxws:client id="userWebService"
+                  serviceClass="com.facade.service.UserWebService"
+                  address="#{customerProperties['userWebService.url']}">
+        <jaxws:outInterceptors>
+
+            <bean name="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+<!--            <ref bean="outInterceptor"></ref>-->
+        </jaxws:outInterceptors>
+<!--        <jaxws:inInterceptors>-->
+<!--            <bean name="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>-->
+<!--            <ref bean="inInterceptor"></ref>-->
+<!--        </jaxws:inInterceptors>-->
+    </jaxws:client>
+
+
+
+</beans>

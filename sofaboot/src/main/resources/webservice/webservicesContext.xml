@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+<!--	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />-->
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<bean id="outInterceptor" class="com.zyy.sofa.webserviceInterceptor.MessageOutInterceptor"/>
+	<bean id="inInterceptor" class="com.zyy.sofa.webserviceInterceptor.WebLogInInterceptor"/>
+	<jaxws:endpoint
+        id="userService"
+        address="/userService"
+		serviceName="userService"
+        implementor="com.zyy.sofa.service.impl.UserServiceImpl"
+        implementorClass="com.facade.service.UserService" >
+		<jaxws:inInterceptors>
+			<bean name="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+			<!--			<ref bean="inInterceptor"></ref>-->
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean name="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+			<!--		    <ref bean="outInterceptor"></ref>-->
+		</jaxws:outInterceptors>
+    </jaxws:endpoint>
+	<jaxws:endpoint
+			id="userWebService"
+			address="/userWebService"
+			implementor="com.zyy.sofa.service.impl.UserWebServiceImpl"
+			implementorClass="com.facade.service.UserWebService" >
+		<jaxws:inInterceptors>
+			<bean name="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+<!--			<ref bean="inInterceptor"></ref>-->
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean name="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+<!--		    <ref bean="outInterceptor"></ref>-->
+		</jaxws:outInterceptors>
+
+	</jaxws:endpoint>
+
+	<jaxws:endpoint
+			id="testService"
+			address="/testService"
+			implementor="com.zyy.sofa.service.impl.TestServiceImpl"
+			implementorClass="com.zyy.sofa.service.impl.TestService" >
+		<jaxws:inInterceptors>
+			<bean name="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+			<!--			<ref bean="inInterceptor"></ref>-->
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean name="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+			<!--		    <ref bean="outInterceptor"></ref>-->
+		</jaxws:outInterceptors>
+
+	</jaxws:endpoint>
+
+
+
+
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="dubbo-api"  />
+    <!-- 注册中心暴露服务地址 -->
+    <!--<dubbo:registry address="N/A" />-->
+    <dubbo:protocol name="dubbo" port="20882"/>
+<!--    <dubbo:registry  address="${com.alipay.sofa.rpc.registry-address}" port="8848" protocol="nacos"   />-->
+
+    <dubbo:reference id="userService1" check="false" version="1.0.0"
+                     interface="com.facade.service.UserService" retries="0" timeout="10000">
+
+
+    </dubbo:reference>
+
+
+
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+
+    <sofa:reference id="userService2" interface="com.facade.service.UserService">
+
+        <sofa:binding.rest/>
+
+    </sofa:reference>
+
+    <sofa:reference id="userService" interface="com.facade.service.UserService">
+
+        <sofa:binding.bolt/>
+
+    </sofa:reference>
+    <!--       <sofa:service ref="userWebServiceImpl" interface="UserService">-->
+    <!--           <sofa:binding.bolt/>-->
+    <!--       </sofa:service>-->
+    <!--    &lt;!&ndash; bolt引用 &ndash;&gt;-->
+    <!--    <sofa:reference id="boltHelloSyncServiceReference"-->
+    <!--                    interface="com.uisftech.bip.service.HelloSyncService">-->
+    <!--        <sofa:binding.bolt />-->
+    <!--    </sofa:reference>-->
+    <!--    &lt;!&ndash; rest引用 &ndash;&gt;-->
+    <!--    <sofa:reference id="restHelloSyncServiceReference"-->
+    <!--                    interface="com.uisftech.bip.service.HelloSyncService">-->
+    <!--        <sofa:binding.rest />-->
+    <!--    </sofa:reference>-->
+    <!--    &lt;!&ndash; dubbo引用 &ndash;&gt;-->
+    <!--    <sofa:reference id="dubboHelloSyncServiceReference"-->
+    <!--                    interface="com.uisftech.bip.service.HelloSyncService">-->
+    <!--        <sofa:binding.dubbo />-->
+    <!--    </sofa:reference>-->
+</beans>
